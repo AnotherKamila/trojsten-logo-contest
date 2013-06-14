@@ -1,0 +1,42 @@
+#filedrag {
+  display: none;
+  text-align: center;
+  padding: 1em 0;
+  margin: 1em 0;
+  color: #555;
+  border: 2px dashed #555;
+  border-radius: 7px;
+  cursor: default;
+}
+#filedrag.active {
+  color: #f00;
+  border-color: #f00;
+  border-style: solid;
+  box-shadow: inset 0 3px 4px #888;
+}
+#showimage {
+  display: none;
+}
+#progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: none;
+  background: rgba(255,255,255,0.4);
+}
+#progressbarbg {
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  margin: 0 auto 0 auto;
+  width: 60%;
+  height: 30px;
+  background: #008000;
+}
+#progressbar {
+  width: 0%;
+  height: 30px;
+  background: #f00;
+}

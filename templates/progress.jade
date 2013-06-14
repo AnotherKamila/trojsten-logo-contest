@@ -1,0 +1,22 @@
+extend chrome
+block content
+    p#message Uploadujem...
+    div#progress
+        div#bar
+
+    :coffeescript
+        $ = (id) -> document.getElementById id
+
+        getProgress = ->
+            req = new XMLHttpRequest()
+            req.onload = ->
+                progress = req.responseText
+                if progress == 'complete'
+                    $('message').innerText = 'Hotovo!'
+                    progress = 100
+                    window.location.href = '/submits'
+                bar.style.width = "#{progress}%"
+            req.open 'get', "/progress?tid=#{tid}", true
+            req.send()
+
+        setInterval getProgress, 2000

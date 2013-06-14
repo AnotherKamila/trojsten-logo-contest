@@ -1,6 +1,8 @@
 extend chrome
 block content
-    div.img!= cloudinary.image(submit._id.toString(), { format: 'png', width: 400 })
-    p.author= submit.author.name
+
+    div.img!= cloudinary.image(submit._id.toString(), { format: 'png', width: 400 })    
+    p.author Autor: #{submit.author.name}
     p.date #{submit.date.getDate()}. #{submit.date.getMonth()}. #{submit.date.getFullYear()}
     p.desc= submit.desc
+    //- p.votes #{votes} hlasov

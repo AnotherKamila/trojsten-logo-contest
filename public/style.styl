@@ -1,23 +1,59 @@
+html
+    padding: 0
 
-
-#filedrag
-    display: none
+body
+    background: #fff
+    color: #222
+    margin: 0
     text-align: center
-    padding: 1em 0
-    margin: 1em 0
-    color: #555
-    border: 2px dashed #555
-    border-radius: 7px
-    cursor: default
 
-#filedrag.active
-    color: #f00
-    border-color: #f00
-    border-style: solid
-    box-shadow: inset 0 3px 4px #888
+header
+    background: #eee
+    padding: 0.8em 0
+    border-bottom: 1px solid #ccc
+    margin-bottom: 2em
+
+header h1
+    font-weight: bold
+    font-size: 2.4em
+    margin: 0
+    color: #15708C
+
+#content
+    margin: 0 auto
+
+table
+    margin: 0 auto
+table tr td
+    width: 20em
+    padding: 0.3em
+    border: none
+table tr td:first-child
+    text-align: right
+table tr td:last-child
+    text-align: left
+table tr td[colspan=2]
+    text-align: left
+
+input[type=text]
+input[type=email]
+textarea
+    border: 1px solid #ccc
+    padding: 0.3em 0.4em
+textarea
+    width: 100%
+    height: 5em
+
+:focus
+    outline: 1px solid #15708C
 
 #showimage
     display: none
+
+#preview
+    border: 4px solid #ccc
+    display: block
+    margin: 0 auto
 
 #uploading-overlay
     position: fixed
@@ -26,7 +62,7 @@
     height: 100%
     width: 100%
     display: none
-    background: rgba(255,255,255,0.4)
+    background: rgba(255,255,255,0.8)
 
 #uploading-content
     position: absolute
@@ -34,5 +70,42 @@
     left: 20%
     margin: 0 auto 0 auto
     width: 60%
-    height: 10%
-    border: 1px solid red
+    padding: 1em
+    font-size: 1.2em
+
+.img img
+a img
+    border: 4px solid #ccc
+a:hover img
+    border-color: #15708C
+
+ul#submits
+    list-style: none
+    display: inline-block
+    margin: 0
+    padding: 0
+ul#submits li
+    margin: 0
+    padding: 3em
+
+ul#submits li .desc
+    font-size: 0.8em
+
+#go-upload-stuff
+input#submit
+    display: block
+    text-decoration: none
+    color: #fff
+    text-shadow: 0px -1px 0px darken(#15708C, 60%)
+    background: #15708C
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+    padding: 0.6em
+    width: 12em
+    margin: 0 auto
+    font-size: 1.4em
+    border: 1px solid lighten(#15708C, 20%)
+    border-bottom-color: darken(#15708C, 20%)
+    border-right-color: darken(#15708C, 20%)
+    cursor: pointer

@@ -27,7 +27,7 @@ app.get '/upload', (req, res) ->
 app.post '/', (req, res) ->
     req.form.on 'progress', (have, total) -> console.log ((have/total)*100).toFixed 2 + '% uploaded'
     req.form.on 'end', ->
-        req.body.date = new Date()
+        req.body.date = new Date(); res.body.votes = 0
         submits_c.insert req.body, { safe: true }, (err, records) ->
             # if err then TODO Error handling!
             console.log records

@@ -1,23 +1,37 @@
 extend chrome
 block content
+    h2 Tvoj navrh
+
     form#uploadform(action='#{action}', method='post', enctype='multipart/form-data')
-        p Autor:
-            input(name='author[name]', type='text')
-        p E-mail (nebude publikovany):
-            input(name='author[email]', type='email')
-        p Navrh (obrazok):
-            input#imageselect(name='image', type='file')
 
-        div#showimage
-            img#preview(width=200, alt='submitted image preview')
-
-        p Popis:
-            textarea(name='desc')
-
-        input#submit(type='submit', value='Uploadni')
+        table
+            tr
+                td Autor:
+                td 
+                    input(name='author[name]', type='text')
+            tr
+                td E-mail (nebude publikovany):
+                td
+                    input(name='author[email]', type='email')
+            tr#imageselect
+                td Navrh (obrazok):
+                td
+                    input(name='image', type='file')
+            tr
+                td(colspan=2)
+                    div#showimage
+                        img#preview(width=300, alt='submitted image preview')
+            tr
+                td(colspan=2) Popis:
+                    textarea(name='desc')
+            tr
+                td(colspan=2, style='text-align: center')
+                    input#submit(type='submit', value='Uploadni')
 
     div#uploading-overlay
-        div#uploading-content Uploadujem, prosim cakaj...
+        div#uploading-content
+            img(src='/load.gif')
+            p Uploadujem, prosim cakaj...
 
     :coffeescript
         $ = (id) -> document.getElementById id

@@ -7,6 +7,7 @@ fs         = require 'fs'
 
 app = express()
 
+app.use express.logger 'dev'
 app.use express.bodyParser defer: true
 app.use stylus.middleware src: __dirname+'/public'
 app.use express.static __dirname+'/public'
@@ -37,13 +38,14 @@ app.post '/', (req, res) ->
 
             onsuccess = (img_o) ->
                 console.log img_o
-                res.redirect "/submits/#{img_o.public_id}"
+                res.redirect "/submits"
                 if tid? then progress[tid] = 'complete'
 
             cloudinary_stream = cloudinary.uploader.upload_stream onsuccess, public_id: records[0]._id.toString()
             fs.createReadStream(req.files.image.path, {encoding: 'binary'}).on('data', cloudinary_stream.write).on('end', cloudinary_stream.end)
 
 app.get '/progress', (req, res) ->
+    console.log "progress for #{req.query.tid} requested, sending `#{progress[req.query.tid]}'"
     res.send progress[req.query.tid]
 
 app.get '/submits', (req, res) ->

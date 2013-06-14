@@ -67,12 +67,13 @@ block content
             req = new XMLHttpRequest()
             req.onload = ->
                 progress = req.responseText
-                if progress == 'complete'
-                    window.location.href = '/submits'
-                $('progressbar').style.width = "#{progress}%"
+                if progress == 'complete' then window.location.href = '/submits'
+                else $('progressbar').style.width = "#{progress}%"
+                console.log " * progress: #{progress}%"
 
             getProgress = ->
+                console.log 'asking for progress info...'
                 req.open 'get', "/progress?tid=#{tid}", true
                 req.send()
 
-            setInterval getProgress, 2000
+            setInterval getProgress, 1000

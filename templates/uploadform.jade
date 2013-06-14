@@ -5,10 +5,8 @@ block content
             input(name='author[name]', type='text')
         p E-mail (nebude publikovany):
             input(name='author[email]', type='email')
-        div#fileselect
-            p Navrh (obrazok):
-                input#imageselect(name='image', type='file')
-            div#filedrag alebo potiahni obrazok sem
+        p Navrh (obrazok):
+            input#imageselect(name='image', type='file')
 
         div#showimage
             img#preview(width=200, alt='submitted image preview')
@@ -18,29 +16,21 @@ block content
 
         input#submit(type='submit', value='Uploadni')
 
-    div#progress
-        div#progressbarbg
-            div#progressbar
+    div#uploading-overlay
+        div#uploading-content Uploadujem, prosim cakaj...
 
     :coffeescript
         $ = (id) -> document.getElementById id
 
-        if window.File && window.FileList && window.FileReader && (new XMLHttpRequest()).upload?  # check for browser support
+        if window.File && window.FileList && window.FileReader  # check for browser support
 
             image = null
-
-            message = (msg) ->
-                $('messages').innerHtml = msg + $('messages').innerHtml
-
-            fileDragChange = (e) ->
-                e.stopPropagation(); e.preventDefault()
-                e.target.className = if e.type == 'dragover' then 'active' else ''
 
             showInfo = (img) ->
                 reader = new FileReader()
                 reader.onload = (e) ->
                     $('preview').setAttribute 'src', e.target.result
-                    $('fileselect').style.display = 'none'
+                    $('imageselect').style.display = 'none'
                     $('showimage').style.display = 'block'
                 reader.readAsDataURL img
 
@@ -50,30 +40,6 @@ block content
 
             $('imageselect').addEventListener 'change', handleFileSelect, false
             
-            for e in [ 'dragover', 'dragleave', 'drop' ]
-                $('filedrag').addEventListener e, fileDragChange, false
-            $('filedrag').addEventListener 'drop', handleFileSelect, false
-            $('filedrag').style.display = 'block'  # unhide it
-
-        s4 = -> Math.floor((1+Math.random()) * 0x10000).toString(16).substring(1)
-
-        tid = s4()+s4()
-        $('uploadform').setAttribute 'action', "#{$('uploadform').getAttribute 'action'}?tid=#{tid}"
-
         $('submit').addEventListener 'click', ->
             console.log 'upload started'
-            $('progress').style.display = 'block'
-
-            req = new XMLHttpRequest()
-            req.onload = ->
-                progress = req.responseText
-                if progress == 'complete' then window.location.href = '/submits'
-                else $('progressbar').style.width = "#{progress}%"
-                console.log " * progress: #{progress}%"
-
-            getProgress = ->
-                console.log 'asking for progress info...'
-                req.open 'get', "/progress?tid=#{tid}", true
-                req.send()
-
-            setInterval getProgress, 1000
+            $('uploading-overlay').style.display = 'block'

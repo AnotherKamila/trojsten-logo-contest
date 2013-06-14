@@ -7,7 +7,7 @@ fs         = require 'fs'
 
 app = express()
 
-app.use express.logger 'dev'
+app.use express.logger()
 app.use express.bodyParser defer: true
 app.use stylus.middleware src: __dirname+'/public'
 app.use express.static __dirname+'/public'
@@ -15,21 +15,17 @@ app.use express.static __dirname+'/public'
 app.set 'views', __dirname+'/templates'
 app.set 'view engine', 'jade'
 
-progress = {}
-
 db = (require 'mongoskin').db process.env.MONGOHQ_URL, auto_reconnect: true, w: 'majority'
 submits_c = db.collection 'submits'
 
 app.get '/', (req, res) ->
     res.redirect '/submits'
 
-app.get '/uploadform', (req, res) ->
+app.get '/upload', (req, res) ->
     res.render 'uploadform', { action: '/' }
 
 app.post '/', (req, res) ->
-    tid = req.query.tid
-    console.log '*** tid: '+tid
-    req.form.on 'progress', (have, total) -> if tid? then progress[tid] = (100*have/total).toFixed 2; console.log progress[tid] + '% uploaded'
+    req.form.on 'progress', (have, total) -> console.log ((have/total)*100).toFixed 2 + '% uploaded'
     req.form.on 'end', ->
         req.body.date = new Date()
         submits_c.insert req.body, { safe: true }, (err, records) ->
@@ -38,15 +34,10 @@ app.post '/', (req, res) ->
 
             onsuccess = (img_o) ->
                 console.log img_o
-                res.redirect "/submits"
-                if tid? then progress[tid] = 'complete'
+                res.redirect "/submits/#{img_o.public_id}"
 
             cloudinary_stream = cloudinary.uploader.upload_stream onsuccess, public_id: records[0]._id.toString()
             fs.createReadStream(req.files.image.path, {encoding: 'binary'}).on('data', cloudinary_stream.write).on('end', cloudinary_stream.end)
-
-app.get '/progress', (req, res) ->
-    console.log "progress for #{req.query.tid} requested, sending `#{progress[req.query.tid]}'"
-    res.send progress[req.query.tid]
 
 app.get '/submits', (req, res) ->
     submits_c.find().toArray (err, result) ->
@@ -58,4 +49,6 @@ app.get '/submits/:id', (req, res) ->
         console.error err if err?
         res.render 'single_submit', { cloudinary, submit: result }
 
-app.listen process.env.PORT || 5000
+port = process.env.PORT || 5000
+app.listen port
+console.log "Listening on port #{port}"

@@ -8,6 +8,10 @@ html(lang='sk')
         header
             h1
                 a(href='/')= app.get('title')
+        nav
+            a(href='/submits') Submity
+            a(href='/upload') Submitni svoj návrh
+            a(href='/rules') Pravidlá
         #content
             p.info Hodnotí sa nápad, nie realizácia. Dotiahnuť skvelú pointu do dokonalosti už nebude problém ;-)
             block content

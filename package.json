@@ -9,6 +9,7 @@
         "coffee-script": "1.x",
         "express": "3.x",
         "jade": "0.x",
+        "markdown-js": "*",
         "mongoskin": "0.x",
         "stylus": "*"
     },

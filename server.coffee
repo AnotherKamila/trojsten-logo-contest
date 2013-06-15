@@ -22,6 +22,9 @@ submits_c = db.collection 'submits'
 app.get '/', (req, res) ->
     res.redirect '/submits'
 
+app.get '/rules', (req, res) ->
+    res.render 'rules', {app}
+    
 app.get '/upload', (req, res) ->
     res.render 'uploadform', { action: '/', app }
 

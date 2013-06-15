@@ -1,8 +1,8 @@
 extend chrome
 block content
-    a#go-upload-stuff(href='/upload') Uploadni svoj navrh!
+    a#go-upload-stuff(href='/upload') Uploadni svoj návrh!
     ul#submits
         each item in submits
-            li
+            li(class= votefor == item._id.toString() ? 'votefor' : '')
                 a.img(href='/submits/#{item._id.toString()}')!= cloudinary.image(item._id.toString(), { format: 'png', width: 200, height: 200, crop: 'fill' })
                 p.desc= item.desc

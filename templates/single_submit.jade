@@ -1,8 +1,21 @@
 extend chrome
 block content
 
-    div.img!= cloudinary.image(submit._id.toString(), { format: 'png', width: 400 })    
+    div.img!= cloudinary.image(submit.id, { format: 'png', width: 400 })    
     p.author Autor: #{submit.author.name}
     p.date #{submit.date.getDate()}. #{submit.date.getMonth()}. #{submit.date.getFullYear()}
     p.desc= submit.desc
-    //- p.votes #{votes} hlasov
+    if submit.votes
+        if submit.votes == 1
+            p.votes 1 hlas
+        else if submit.votes < 5
+            p.votes #{submit.votes} hlasy
+        else
+            p.votes #{submit.votes} hlasov
+
+    form(action='/vote/#{submit._id.toString()}', method='post')
+        input(type='hidden', name='inc', value='true')
+        if votefor == submit.id
+            input#hlasuj(type='submit', value='♥', disabled)
+        else
+            input#hlasuj(type='submit', value='Hlas')

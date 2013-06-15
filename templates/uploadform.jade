@@ -1,6 +1,6 @@
 extend chrome
 block content
-    h2 Tvoj navrh
+    h2 Tvoj návrh
 
     form#uploadform(action='#{action}', method='post', enctype='multipart/form-data')
 
@@ -8,30 +8,32 @@ block content
             tr
                 td Autor:
                 td 
-                    input(name='author[name]', type='text')
+                    input(name='author[name]', type='text', required)
             tr
-                td E-mail (nebude publikovany):
+                td E-mail (nebude publikovaný):
                 td
-                    input(name='author[email]', type='email')
+                    input(name='author[email]', type='email', required)
             tr#imageselect
-                td Navrh (obrazok):
+                td Návrh (obrázok):
                 td
-                    input(name='image', type='file')
+                    input(name='image', type='file', required)
             tr
                 td(colspan=2)
                     div#showimage
-                        img#preview(width=300, alt='submitted image preview')
+                        div#kecy1 najlepšie SVG, PNG alebo JPG
+                        img#preview(width=300, alt='submitted image preview', style='display: none')
+                        div#kecy2(style='display: none') pekný!
             tr
                 td(colspan=2) Popis:
-                    textarea(name='desc')
+                    textarea#desc_i(name='desc', required)
             tr
-                td(colspan=2, style='text-align: center')
+                td(colspan=2, style='text-align: center; padding-top: 3em')
                     input#submit(type='submit', value='Uploadni')
 
     div#uploading-overlay
         div#uploading-content
             img(src='/load.gif')
-            p Uploadujem, prosim cakaj...
+            p Uploadujem, prosím čakaj...
 
     :coffeescript
         $ = (id) -> document.getElementById id
@@ -44,8 +46,11 @@ block content
                 reader = new FileReader()
                 reader.onload = (e) ->
                     $('preview').setAttribute 'src', e.target.result
+                    $('kecy2').innerText = "typ: #{img.type}, veľkost: #{(img.size/1024).toFixed 1}kB"
                     $('imageselect').style.display = 'none'
-                    $('showimage').style.display = 'block'
+                    $('kecy1').style.display = 'none'
+                    $('preview').style.display = 'block'
+                    $('kecy2').style.display = 'block'
                 reader.readAsDataURL img
 
             handleFileSelect = (e) ->
@@ -54,6 +59,13 @@ block content
 
             $('imageselect').addEventListener 'change', handleFileSelect, false
             
-        $('submit').addEventListener 'click', ->
-            console.log 'upload started'
-            $('uploading-overlay').style.display = 'block'
+        $('submit').addEventListener 'submit', (e) ->
+            for i in $('uploadform').getElementsByTagName('input')
+                if (not i.value?) or i.value == '' then emptystuff = true
+            if (not $('desc_i').value?) or $('desc_i').value == '' then emptystuff = true
+            if emptystuff
+                e.stopPropagation()
+                e.preventDefault()
+                alert 'Nie sú vyplnené všetky údaje!'
+            else
+                $('uploading-overlay').style.display = 'block'

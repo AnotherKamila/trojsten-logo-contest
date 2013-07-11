@@ -23,13 +23,12 @@ app.get '/', (req, res) ->
     res.redirect '/submits'
 
 app.get '/rules', (req, res) ->
-    res.render 'rules', {app}
+    res.render 'rules', { url: '/rules', app}
     
 app.get '/upload', (req, res) ->
-    res.render 'uploadform', { action: '/', app }
+    res.render 'uploadform', { action: '/', url: '/upload', app, }
 
 app.post '/', (req, res) ->
-    req.form.on 'progress', (have, total) -> console.log ((have/total)*100).toFixed 2 + '% uploaded'
     req.form.on 'end', ->
         req.body.date = new Date()
         submits_c.insert req.body, { safe: true }, (err, records) ->
@@ -46,13 +45,13 @@ app.post '/', (req, res) ->
 app.get '/submits', (req, res) ->
     submits_c.find().toArray (err, result) ->
         console.error err if err?
-        res.render 'submits', { cloudinary, submits: result, votefor: req.cookies['votefor'], app }
+        res.render 'submits', { cloudinary, submits: result, votefor: req.cookies['votefor'], url: '/submits', app }
 
 app.get '/submits/:id', (req, res) ->
     submits_c.findOne _id: (db.ObjectID.createFromHexString req.params.id), (err, result) ->
         console.error err if err?
         result.id = result._id.toString()
-        res.render 'single_submit', { cloudinary, submit: result, votefor: req.cookies['votefor'], app }
+        res.render 'single_submit', { cloudinary, submit: result, votefor: req.cookies['votefor'], url: "/submits/#{req.params.id}", app }
 
 app.post '/vote/:id', (req, res) ->  # yes, the following should be a transaction
     vote = ->

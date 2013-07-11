@@ -9,9 +9,9 @@ html(lang='sk')
             h1
                 a(href='/')= app.get('title')
         nav
-            a(href='/submits') Submity
-            a(href='/upload') Submitni svoj návrh
-            a(href='/rules') Pravidlá
+            a(href='/submits', class= url == '/submits' ? 'active' : '') Submity
+            a(href='/upload', class= url == '/upload' ? 'active' : '') Submitni svoj návrh
+            a(href='/rules', class= url == '/rules' ? 'active' : '') Pravidlá
         #content
             p.info Hodnotí sa nápad, nie realizácia. Dotiahnuť skvelú pointu do dokonalosti už nebude problém ;-)
             block content

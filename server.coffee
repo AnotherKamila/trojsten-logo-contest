@@ -7,7 +7,6 @@ fs         = require 'fs'
 
 app = express().set 'title', 'Trojsten New Logo Challenge'
 
-app.use express.logger()
 app.use express.bodyParser defer: true
 app.use express.cookieParser()
 app.use stylus.middleware src: __dirname+'/public'
@@ -30,6 +29,7 @@ app.get '/upload', (req, res) ->
 
 app.post '/', (req, res) ->
     req.form.on 'end', ->
+        # TODO some validation would be nice :D
         req.body.date = new Date()
         submits_c.insert req.body, { safe: true }, (err, records) ->
             # if err then TODO Error handling!
@@ -65,4 +65,3 @@ app.post '/vote/:id', (req, res) ->  # yes, the following should be a transactio
 
 port = process.env.PORT || 5000
 app.listen port
-console.log "Listening on port #{port}"
